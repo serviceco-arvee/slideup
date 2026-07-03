@@ -375,25 +375,6 @@
         margin-right: 8px;
       }
 
-      /* Stays fixed in the viewport while the ingredient list scrolls beneath it */
-      .ingredients__button--sticky {
-        position: fixed;
-        left: 50%;
-        bottom: 20px;
-        transform: translateX(-50%);
-        margin-top: 0;
-        z-index: 2;
-      }
-
-      .ingredients__button--sticky:hover {
-        transform: translateX(-50%) translateY(-2px);
-      }
-
-      .ingredients__button--sticky:active {
-        transform: translateX(-50%) scale(0.96);
-        transition-duration: 0.12s;
-      }
-
       /* --- Placeholder thumb/image for ingredients without artwork yet --- */
       .ingredients__thumb--placeholder,
       .detail__image--placeholder {
@@ -919,29 +900,62 @@
 
   <section class="ingredients" id="brand-menu-section" style="display: none;">
     <style>
+      /* This screen owns its own viewport height: heading stays put, only the
+         list scrolls in its own contained box, and the button is a normal
+         (non-floating) element below it — never covered by scrolled content. */
+      #brand-menu-section {
+        height: 100vh;
+        height: 100dvh;
+        padding: 40px 20px 20px;
+        overflow: hidden;
+      }
+
       .brand-menu__topbar {
         position: relative;
         width: 100%;
         display: flex;
         justify-content: center;
         margin-bottom: 20px;
+        flex-shrink: 0;
       }
 
-      #brand-menu-section {
-        padding-bottom: 160px;
+      #brand-menu-section .ingredients__heading,
+      #brand-menu-section .ingredients__subheading {
+        flex-shrink: 0;
       }
 
-      /* Fades the ingredient list to the background color near the bottom
-         so the fixed "Return to Page" button stays legible over scrolled content */
-      .ingredients__fade {
-        position: fixed;
+      .ingredients__scroll {
+        flex: 1 1 auto;
+        min-height: 0;
+        width: 100%;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .ingredients__scroll .ingredients__list {
+        width: 100%;
+        padding-bottom: 24px;
+      }
+
+      .ingredients__scroll-fade {
+        position: sticky;
+        bottom: 0;
         left: 0;
         right: 0;
-        bottom: 0;
-        height: 130px;
-        background: linear-gradient(to bottom, rgba(247, 247, 247, 0) 0%, #F7F7F7 70%);
+        height: 20px;
+        margin-top: -20px;
+        width: 100%;
+        background: linear-gradient(to bottom, rgba(247, 247, 247, 0), #F7F7F7);
         pointer-events: none;
-        z-index: 1;
+      }
+
+      #brand-menu-section .ingredients__button {
+        flex-shrink: 0;
+        margin-top: 16px;
       }
     </style>
 
@@ -952,11 +966,12 @@
     <div class="ingredients__heading" id="brand-menu-heading">What&rsquo;s Inside (And Why It&rsquo;s There)</div>
     <div class="ingredients__subheading">Nothing Added Without A Performance Reason</div>
 
-    <div class="ingredients__list" id="brand-menu-list"></div>
+    <div class="ingredients__scroll">
+      <div class="ingredients__list" id="brand-menu-list"></div>
+      <div class="ingredients__scroll-fade"></div>
+    </div>
 
-    <div class="ingredients__fade"></div>
-
-    <div class="ingredients__button ingredients__button--sticky" id="brand-menu-view-all">
+    <div class="ingredients__button" id="brand-menu-view-all">
       <img src="assets/icon.png" alt="" class="ingredients__button-icon">
       <span>Return to Page</span>
     </div>
@@ -992,12 +1007,14 @@
         width: 100%;
         max-width: 480px;
         height: 100vh;
+        height: 100dvh;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
         background: #F7F7F7;
         border-radius: 24px 24px 0 0;
         padding: 36px 5px 32px;
+        padding-top: calc(env(safe-area-inset-top, 0px) + 36px);
         display: flex;
         flex-direction: column;
         align-items: center;
