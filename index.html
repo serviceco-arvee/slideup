@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+  <title>SlideUp</title>
+</head>
+<body>
+  <section class="brand-select" id="brand-select-section">
+    <style>
+      .brand-select {
+        font-family: 'Tomato Grotesk Regular', sans-serif;
+        background: #F7F7F7;
+        padding: 56px 20px 32px;
+        margin: 0;
+        box-sizing: border-box;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .brand-select__icon {
+        width: 39.47px;
+        height: 32px;
+        background-image: url('assets/icon-sunburst.webp');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        margin-bottom: 20px;
+      }
+
+      .brand-select__heading {
+        font-family: 'Tomato Grotesk Regular';
+        font-size: 20px;
+        line-height: 170%;
+        text-align: center;
+        letter-spacing: 0.01em;
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      .brand-select__subheading {
+        font-family: 'Tomato Grotesk Regular';
+        font-size: 12px;
+        line-height: 170%;
+        text-align: center;
+        letter-spacing: 0.01em;
+        color: rgba(0, 0, 0, 0.8);
+        margin-bottom: 28px;
+      }
+
+      .brand-select__list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+      }
+
+      @keyframes riseIn {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .brand-select__option {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        width: 367px;
+        max-width: 100%;
+        min-height: 72px;
+        background: #ffffff;
+        border: none;
+        border-radius: 6px;
+        padding: 12px 20px;
+        box-shadow: 0px 0px 7px 0px #00000026;
+        cursor: pointer;
+        font-family: inherit;
+        text-align: left;
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        animation: riseIn 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .brand-select__option:nth-child(2) {
+        animation-delay: 140ms;
+      }
+
+      .brand-select__option:hover {
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .brand-select__option:active {
+        transform: scale(0.97);
+        transition-duration: 0.12s;
+      }
+
+      .brand-select__option-text {
+        flex: 1;
+      }
+
+      .brand-select__option-title {
+        font-family: 'Tomato Grotesk SemiBold';
+        font-size: 16px;
+        letter-spacing: 0.01em;
+        color: #000000;
+        margin-bottom: 2px;
+      }
+
+      .brand-select__option-subtitle {
+        font-family: 'Tomato Grotesk Regular';
+        font-size: 11px;
+        letter-spacing: 0.01em;
+        color: #8a8a8a;
+      }
+    </style>
+
+    <div class="brand-select__icon"></div>
+    <div class="brand-select__heading">What&rsquo;s Inside (And Why It&rsquo;s There)</div>
+    <div class="brand-select__subheading">Choose Your Formula</div>
+
+    <div class="brand-select__list">
+      <button type="button" class="brand-select__option" id="brand-select-onefit" data-brand="onefit">
+        <div class="brand-select__option-text">
+          <div class="brand-select__option-title">OneFit</div>
+          <div class="brand-select__option-subtitle">Performance &amp; Recovery Ingredients</div>
+        </div>
+        <div class="ingredients__arrow"></div>
+      </button>
+
+      <button type="button" class="brand-select__option" id="brand-select-onelife" data-brand="onelife">
+        <div class="brand-select__option-text">
+          <div class="brand-select__option-title">OneLife</div>
+          <div class="brand-select__option-subtitle">Longevity &amp; Cellular Ingredients</div>
+        </div>
+        <div class="ingredients__arrow"></div>
+      </button>
+    </div>
+  </section>
+
+  <section class="ingredients" id="ingredients-section" style="display: none;">
+    <style>
+      @font-face {
+        font-family: 'Tomato Grotesk Regular';
+        src: url('Tomato Grotesk/TomatoGrotesk-Regular.otf') format('opentype');
+      }
+
+      @font-face {
+        font-family: 'Tomato Grotesk Medium';
+        src: url('Tomato Grotesk/TomatoGrotesk-Medium.otf') format('opentype');
+      }
+
+      @font-face {
+        font-family: 'Tomato Grotesk SemiBold';
+        src: url('Tomato Grotesk/TomatoGrotesk-SemiBold.otf') format('opentype');
+      }
+
+      @font-face {
+        font-family: 'Tomato Grotesk Bold';
+        src: url('Tomato Grotesk/TomatoGrotesk-Bold.otf') format('opentype');
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overscroll-behavior-x: none;
+        touch-action: pan-y;
+      }
+
+      .ingredients {
+        font-family: 'Tomato Grotesk Regular', sans-serif;
+        background: #F7F7F7;
+        padding: 56px 20px 32px;
+        margin: 0;
+        box-sizing: border-box;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .ingredients__icon {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .ingredients__icon-img {
+        width: 39.47px;
+        height: 32px;
+        background-image: url('assets/icon-sunburst.webp');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .ingredients__heading {
+        font-family: 'Tomato Grotesk Regular';
+        font-size: 20px;
+        line-height: 170%;
+        text-align: center;
+        letter-spacing: 0.01em;
+        color: rgba(0, 0, 0, 0.8);
+      }
+
+      .ingredients__subheading {
+        font-family: 'Tomato Grotesk Regular';
+        font-size: 12px;
+        line-height: 170%;
+        text-align: center;
+        letter-spacing: 0.01em;
+        color: rgba(0, 0, 0, 0.8);
+        margin-bottom: 28px;
+      }
+
+      .ingredients__list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .ingredients__row {
+        display: flex;
+        align-items: center;
+        width: 367px;
+        min-height: 83px;
+        opacity: 1;
+        background: #ffffff;
+        border-radius: 6px;
+        padding: 12px 20px;
+        box-shadow: 0px 0px 7px 0px #00000026;
+        box-sizing: border-box;
+        transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .ingredients__row--enter {
+        animation: riseIn 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .ingredients__row:active {
+        transform: scale(0.97);
+        box-shadow: 0px 0px 4px 0px #00000026;
+        transition-duration: 0.12s;
+      }
+
+      .ingredients__thumb {
+        position: relative;
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        border-radius: 5px;
+        background-color: #efece7;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin-right: 16px;
+      }
+
+      .ingredients__thumb::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 5px;
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.1));
+        mix-blend-mode: overlay;
+        pointer-events: none;
+      }
+
+      .ingredients__thumb--protein {
+        background-image: url('assets/ingredient-protein.webp');
+      }
+
+      .ingredients__thumb--creatine {
+        background-image: url('assets/ingredient-creatine.webp');
+      }
+
+      .ingredients__thumb--electrolytes {
+        background-image: url('assets/ingredient-electrolytes.webp');
+      }
+
+      .ingredients__thumb--carnitine {
+        background-image: url('assets/ingredient-carnitine.webp');
+      }
+
+      .ingredients__thumb--bcaa {
+        background-image: url('assets/ingredient-bcaa.webp');
+      }
+
+      .ingredients__label {
+        flex: 1;
+        font-family: 'Tomato Grotesk Medium';
+        font-size: 14px;
+        line-height: 170%;
+        letter-spacing: 0.01em;
+        color: #000000;
+      }
+
+      .ingredients__arrow {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+        gap: 10px;
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.25));
+        border-radius: 100px;
+        flex: none;
+        order: 1;
+        flex-grow: 0;
+        background-image: url('assets/icon-arrow.webp');
+        background-size: 16px;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .ingredients__button {
+        box-sizing: border-box;
+        width: 367px;
+        height: 43px;
+        margin-top: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 54px;
+        opacity: 1;
+        font-family: 'Tomato Grotesk SemiBold';
+        font-style: normal;
+        font-size: 12px;
+        line-height: 170%;
+        text-align: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        color: #000000;
+        background: #FFFFFF;
+        border-radius: 2px;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+        flex: none;
+        order: 1;
+        flex-grow: 0;
+        z-index: 1;
+        cursor: pointer;
+        transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .ingredients__button:hover {
+        background: #fafafa;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+      }
+
+      .ingredients__button:active {
+        transform: scale(0.96);
+        transition-duration: 0.12s;
+      }
+
+      .ingredients__button-icon {
+        width: 13px;
+        height: auto;
+        margin-right: 8px;
+      }
+
+      /* Stays fixed in the viewport while the ingredient list scrolls beneath it */
+      .ingredients__button--sticky {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        margin-top: 0;
+        z-index: 2;
+      }
+
+      .ingredients__button--sticky:hover {
+        transform: translateX(-50%) translateY(-2px);
+      }
+
+      .ingredients__button--sticky:active {
+        transform: translateX(-50%) scale(0.96);
+        transition-duration: 0.12s;
+      }
+
+      /* --- Placeholder thumb/image for ingredients without artwork yet --- */
+      .ingredients__thumb--placeholder,
+      .detail__image--placeholder {
+        background-color: #efece7;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b8b2a7' stroke-width='1.4'%3E%3Crect x='3' y='3' width='18' height='18' rx='3'/%3E%3Ccircle cx='9' cy='9' r='2'/%3E%3Cpath d='M21 15l-5-5-9 9'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .ingredients__thumb--placeholder {
+        background-size: 26px;
+      }
+
+      .detail__image--placeholder {
+        background-size: 32px;
+      }
+
+      .ingredients__thumb--onelife-electrolytes {
+        background-image: url('assets/ingredient-electrolytes.webp');
+      }
+
+      /* --- Slide-up-from-bottom animation used when a menu item opens its detail view --- */
+      @keyframes detailSlideUp {
+        from {
+          transform: translateY(48px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      .detail--enter {
+        animation: detailSlideUp 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+    </style>
+    <div class="ingredients__icon">
+      <div class="ingredients__icon-img"></div>
+    </div>
+
+    <div class="ingredients__heading">What&rsquo;s Inside (And Why It&rsquo;s There)</div>
+    <div class="ingredients__subheading">Nothing Added Without A Performance Reason</div>
+
+    <div class="ingredients__list" id="default-ingredients-list">
+      <div class="ingredients__row" id="row-protein" style="cursor: pointer;">
+        <div class="ingredients__thumb ingredients__thumb--protein"></div>
+        <div class="ingredients__label">25g Hydrolysed Protein</div>
+        <div class="ingredients__arrow"></div>
+      </div>
+
+      <div class="ingredients__row">
+        <div class="ingredients__thumb ingredients__thumb--creatine"></div>
+        <div class="ingredients__label">5g Creatine Monohydrate</div>
+        <div class="ingredients__arrow"></div>
+      </div>
+
+      <div class="ingredients__row">
+        <div class="ingredients__thumb ingredients__thumb--electrolytes"></div>
+        <div class="ingredients__label">1g Elemental Quad-Electrolytes</div>
+        <div class="ingredients__arrow"></div>
+      </div>
+
+      <div class="ingredients__row">
+        <div class="ingredients__thumb ingredients__thumb--carnitine"></div>
+        <div class="ingredients__label">1g L-Carnitine For Fat Oxidation</div>
+        <div class="ingredients__arrow"></div>
+      </div>
+
+      <div class="ingredients__row">
+        <div class="ingredients__thumb ingredients__thumb--bcaa"></div>
+        <div class="ingredients__label">1g Of BCAAs</div>
+        <div class="ingredients__arrow"></div>
+      </div>
+    </div>
+
+    <div class="ingredients__button">View Entire Ingredient List</div>
+
+    <script>
+    </script>
+  </section>
+
+  <section class="detail" id="detail-section" style="display: none;">
+    <style>
+      @font-face {
+        font-family: 'Tomato Grotesk Bold Slanted';
+        src: url('Tomato Grotesk/TomatoGrotesk-BoldSlanted.otf') format('opentype');
+      }
+
+      @font-face {
+        font-family: 'Tomato Grotesk Light';
+        src: url('Tomato Grotesk/TomatoGrotesk-Light.otf') format('opentype');
+      }
+
+      .detail {
+        box-sizing: border-box;
+        font-family: 'Tomato Grotesk Regular', sans-serif;
+        background: #F7F7F7;
+        width: 100%;
+        min-height: 100vh;
+        margin: 0;
+        padding: 48px 5px 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .detail__topbar {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 7px;
+      }
+
+      .detail__icon {
+        width: 39.47px;
+        height: 32px;
+        background-image: url('assets/icon-sunburst.webp');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+
+      .detail__back {
+        position: absolute;
+        right: 32px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        opacity: 0.85;
+        transition: opacity 0.2s ease;
+        background-image: url('assets/icon.png');
+        background-size: 19.5px 13.5px;
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+      }
+
+      .detail__back:hover {
+        opacity: 1;
+      }
+
+      .detail__title {
+        width: 336px;
+        max-width: 100%;
+        font-family: 'Tomato Grotesk Medium';
+        font-style: normal;
+        font-size: 20px;
+        line-height: 170%;
+        text-align: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        color: #000000;
+        margin-bottom: 4px;
+      }
+
+      .detail__tags {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        font-family: 'Tomato Grotesk Regular';
+        font-size: 11px;
+        letter-spacing: 0.01em;
+        color: #8a8a8a;
+        margin-bottom: 20px;
+      }
+
+      .detail__tags span:not(.detail__tag-divider) {
+        display: inline-block;
+        animation: tagIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .detail__tag-divider {
+        width: 1px;
+        height: 10px;
+        background: #cccccc;
+      }
+
+      @keyframes contentIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes tagIn {
+        from {
+          opacity: 0;
+          transform: translateY(4px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes checkIn {
+        from {
+          opacity: 0;
+          transform: translateY(6px) scale(0.92);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+
+      .detail__content {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+        padding-left: 22px;
+        padding-right: 22px;
+        margin-bottom: 20px;
+      }
+
+      .detail__content--enter {
+        animation: contentIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .detail__image {
+        position: relative;
+        width: 79px;
+        height: 79px;
+        min-width: 79px;
+        opacity: 1;
+        border-radius: 5px;
+        box-shadow: 0px 0px 4px 0px #00000040;
+        background-color: #efece7;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .detail__image::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 5px;
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.12));
+        mix-blend-mode: overlay;
+        pointer-events: none;
+      }
+
+      .detail__image--protein {
+        background-image: url('assets/ingredient-protein.webp');
+      }
+
+      .detail__image--creatine {
+        background-image: url('assets/ingredient-creatine.webp');
+      }
+
+      .detail__image--electrolytes {
+        background-image: url('assets/ingredient-electrolytes.webp');
+      }
+
+      .detail__image--carnitine {
+        background-image: url('assets/ingredient-carnitine.webp');
+      }
+
+      .detail__image--bcaa {
+        background-image: url('assets/ingredient-bcaa.webp');
+      }
+
+      .detail__description {
+        flex: 1;
+        min-width: 0;
+        min-height: 65px;
+        font-size: 10px;
+        line-height: 170%;
+        letter-spacing: 0.04em;
+        text-transform: capitalize;
+        color: #000000;
+      }
+
+      .detail__description-bold {
+        font-family: 'Tomato Grotesk Bold Slanted';
+      }
+
+      .detail__description-regular {
+        font-family: 'Tomato Grotesk Light';
+      }
+
+      .detail__divider {
+        width: calc(100% - 44px);
+        border: none;
+        border-top: 1px solid #00000033;
+        margin: 4px 22px 12px;
+      }
+
+      .detail__chosen-label {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0 22px;
+        font-family: 'Tomato Grotesk SemiBold';
+        font-style: normal;
+        font-size: 12px;
+        line-height: 20px;
+        letter-spacing: 0.01em;
+        color: #202020;
+        margin-bottom: 4px;
+      }
+
+      .detail__checklist {
+        box-sizing: border-box;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        row-gap: 4px;
+        column-gap: 0;
+        width: 100%;
+        padding: 0 22px;
+        margin-bottom: 12px;
+      }
+
+      .detail__check-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        animation: checkIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .detail__check-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 12px;
+        height: 12px;
+        min-width: 12px;
+      }
+
+      .detail__check-text {
+        font-family: 'Tomato Grotesk Light';
+        font-style: normal;
+        font-size: 10px;
+        line-height: 15px;
+        letter-spacing: 0.04em;
+        color: #000000;
+      }
+
+      .detail__learn-more {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0 22px;
+        margin-top: 15px;
+        font-family: 'Tomato Grotesk SemiBold';
+        font-style: normal;
+        font-size: 12px;
+        line-height: 20px;
+        display: flex;
+        align-items: center;
+        letter-spacing: 0.01em;
+        text-transform: capitalize;
+        color: #202020;
+      }
+
+      .detail__gallery {
+        position: relative;
+        box-sizing: border-box;
+        width: calc(100% - 44px);
+        height: 346px;
+        margin-top: 8px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0px 0px 8.7px rgba(0, 0, 0, 0.25);
+      }
+
+      .detail__gallery-image {
+        position: absolute;
+        inset: 0;
+        background: url('assets/1a52eec40894f60a8d9d4aa602f8296b7007cad9.jpg');
+        background-size: 105%;
+        background-position: top center;
+        filter: grayscale(1);
+      }
+
+      .detail__gallery-tint {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+        backdrop-filter: blur(2px);
+        box-shadow: 0px 0px 8.7px 0px #00000040;
+      }
+
+      .detail__gallery-expand {
+        box-sizing: border-box;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 2px;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        box-shadow: -11.15px -10.4px 48px rgba(0, 0, 0, 0.2), -1.86px -1.73px 12px rgba(0, 0, 0, 0.15), inset 0.98px 0.92px 4.12px rgba(255, 255, 255, 0.3), inset 1.91px 1.78px 8.24px rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .detail__gallery-expand img {
+        width: 20px;
+        height: 20px;
+        object-fit: contain;
+      }
+
+      .pdf-viewer {
+        position: absolute;
+        inset: 0;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+
+      .pdf-viewer canvas {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-bottom: 8px;
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      .pdf-viewer__status {
+        margin: auto;
+        padding: 16px;
+        font-family: 'Tomato Grotesk Regular';
+        font-size: 11px;
+        line-height: 160%;
+        text-align: center;
+        color: #8a8a8a;
+      }
+    </style>
+
+    <div class="detail__topbar">
+      <div class="detail__icon"></div>
+      <div class="detail__back"></div>
+    </div>
+
+    <div class="detail__title">25g Hydrolysed Protein</div>
+    <div class="detail__tags">
+      <span>Recovery</span>
+      <span class="detail__tag-divider"></span>
+      <span>Hydration</span>
+      <span class="detail__tag-divider"></span>
+      <span>Metabolic</span>
+      <span class="detail__tag-divider"></span>
+      <span>Gut &amp; Brain</span>
+    </div>
+
+    <div class="detail__content">
+      <div class="detail__image detail__image--protein"></div>
+      <div class="detail__description"><span class="detail__description-bold">Hydrolysed Protein</span><span class="detail__description-regular"> Is Pre-Broken Down For Ultra-Fast Absorption And Easy Digestion, So Your Body Gets High-Quality Amino Acids Immediately—Fueling Recovery And Lean Muscle Without The Bloat Or Heaviness Of Standard Proteins.</span></div>
+    </div>
+
+    <div class="detail__divider"></div>
+
+    <div class="detail__chosen-label">Specifically Chosen:</div>
+    <div class="detail__checklist">
+      <div class="detail__check-item">
+        <span class="detail__check-icon">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 4L3.5 6.5L9 1" stroke="#202020" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="detail__check-text">Pre-digested for speed</span>
+      </div>
+      <div class="detail__check-item">
+        <span class="detail__check-icon">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 4L3.5 6.5L9 1" stroke="#202020" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="detail__check-text">Easier on the gut</span>
+      </div>
+      <div class="detail__check-item">
+        <span class="detail__check-icon">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 4L3.5 6.5L9 1" stroke="#202020" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="detail__check-text">Rapid recovery support</span>
+      </div>
+      <div class="detail__check-item">
+        <span class="detail__check-icon">
+          <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 4L3.5 6.5L9 1" stroke="#202020" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="detail__check-text">High-quality protein signal</span>
+      </div>
+    </div>
+
+    <div class="detail__divider"></div>
+
+    <div class="detail__learn-more">Learn More (Click To Expand):</div>
+    <div class="detail__gallery">
+      <div class="detail__gallery-image"></div>
+      <div class="detail__gallery-tint"></div>
+      <div class="detail__gallery-expand">
+        <img src="assets/Vector.png" alt="Expand">
+      </div>
+    </div>
+  </section>
+
+  <section class="ingredients" id="brand-menu-section" style="display: none;">
+    <style>
+      .brand-menu__topbar {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      #brand-menu-section {
+        padding-bottom: 160px;
+      }
+
+      /* Fades the ingredient list to the background color near the bottom
+         so the fixed "Return to Page" button stays legible over scrolled content */
+      .ingredients__fade {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 130px;
+        background: linear-gradient(to bottom, rgba(247, 247, 247, 0) 0%, #F7F7F7 70%);
+        pointer-events: none;
+        z-index: 1;
+      }
+    </style>
+
+    <div class="brand-menu__topbar">
+      <div class="ingredients__icon-img"></div>
+    </div>
+
+    <div class="ingredients__heading" id="brand-menu-heading">What&rsquo;s Inside (And Why It&rsquo;s There)</div>
+    <div class="ingredients__subheading">Nothing Added Without A Performance Reason</div>
+
+    <div class="ingredients__list" id="brand-menu-list"></div>
+
+    <div class="ingredients__fade"></div>
+
+    <div class="ingredients__button ingredients__button--sticky" id="brand-menu-view-all">
+      <img src="assets/icon.png" alt="" class="ingredients__button-icon">
+      <span>Return to Page</span>
+    </div>
+  </section>
+
+  <div class="sheet-overlay" id="sheet-overlay">
+    <style>
+      .sheet-overlay {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.45);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+        z-index: 1000;
+      }
+
+      .sheet-overlay--open {
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+      }
+
+      .sheet-overlay--open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .sheet-card {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 480px;
+        height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+        background: #F7F7F7;
+        border-radius: 24px 24px 0 0;
+        padding: 36px 5px 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0px -8px 40px rgba(0, 0, 0, 0.3);
+        transform: translateY(100%);
+        will-change: transform;
+        transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .sheet-overlay--open .sheet-card {
+        transform: translateY(0);
+      }
+
+    </style>
+
+    <div class="sheet-card" id="sheet-card">
+      <div class="detail__topbar">
+        <div class="detail__icon"></div>
+        <div class="detail__back" id="sheet-close"></div>
+      </div>
+
+      <div class="detail__title" id="sheet-title"></div>
+      <div class="detail__tags" id="sheet-tags"></div>
+
+      <div class="detail__content">
+        <div class="detail__image" id="sheet-image"></div>
+        <div class="detail__description" id="sheet-description"></div>
+      </div>
+
+      <div class="detail__divider"></div>
+
+      <div class="detail__chosen-label">Specifically Chosen:</div>
+      <div class="detail__checklist" id="sheet-checklist"></div>
+
+      <div class="detail__divider"></div>
+
+      <div class="detail__learn-more">Learn More (Click To Expand):</div>
+      <div class="detail__gallery">
+        <div class="pdf-viewer" id="sheet-pdf-viewer"></div>
+        <div class="detail__gallery-expand" id="sheet-gallery-expand">
+          <img src="assets/Vector.png" alt="Expand">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pdf-modal" id="pdf-modal">
+    <style>
+      .pdf-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 16px;
+        box-sizing: border-box;
+        background: rgba(0, 0, 0, 0.7);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .pdf-modal--open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .pdf-modal__frame-wrap {
+        position: relative;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 480px;
+        height: 100%;
+        background: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.4);
+        transform: scale(0.96);
+        filter: blur(6px);
+        will-change: transform, filter;
+        transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1), filter 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .pdf-modal--open .pdf-modal__frame-wrap {
+        transform: scale(1);
+        filter: blur(0);
+      }
+
+      .pdf-modal__frame-wrap .pdf-viewer {
+        padding: 24px;
+      }
+
+      .pdf-modal__close {
+        box-sizing: border-box;
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        z-index: 2;
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px;
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        border-radius: 5px;
+        box-shadow: -11.15px -10.4px 48px rgba(0, 0, 0, 0.2), -1.86px -1.73px 12px rgba(0, 0, 0, 0.15), inset 0.98px 0.92px 4.12px rgba(255, 255, 255, 0.3), inset 1.91px 1.78px 8.24px rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+      }
+
+      .pdf-modal__close img {
+        width: 19.5px;
+        height: 13.5px;
+      }
+    </style>
+
+    <div class="pdf-modal__frame-wrap">
+      <button type="button" class="pdf-modal__close" id="pdf-modal-close" aria-label="Close">
+        <img src="assets/icon.png" alt="">
+      </button>
+      <div class="pdf-viewer" id="modal-pdf-viewer"></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('row-protein').addEventListener('click', function () {
+      document.getElementById('ingredients-section').style.display = 'none';
+      document.getElementById('detail-section').style.display = 'flex';
+      document.getElementById('detail-section').classList.add('detail--enter');
+    });
+
+    document.querySelector('.detail__back').addEventListener('click', function () {
+      document.getElementById('detail-section').style.display = 'none';
+      document.getElementById('detail-section').classList.remove('detail--enter');
+      document.getElementById('ingredients-section').style.display = 'flex';
+    });
+  </script>
+
+  <script>
+    // --- OneFit / OneLife ingredient data (from OneFit_Ingredient_Spotlights.docx and OneLife_Ingredient_Spotlights.docx) ---
+    var CDN = 'https://cdn.shopify.com/s/files/1/0632/2143/2504/files/';
+
+    var brandIngredients = {
+      onefit: [
+        {
+          title: '25g Hydrolysed Protein',
+          tags: ['Recovery', 'Hydration', 'Metabolic', 'Gut & Brain'],
+          image: 'assets/ingredient-protein.webp',
+          descriptionBold: 'Hydrolysed Protein',
+          descriptionRegular: ' Is Pre-Broken Down For Ultra-Fast Absorption And Easy Digestion, So Your Body Gets High-Quality Amino Acids Immediately—Fueling Recovery And Lean Muscle Without The Bloat Or Heaviness Of Standard Proteins.',
+          checklist: ['Pre-digested for speed', 'Easier on the gut', 'Rapid recovery support', 'High-quality protein signal'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'Creatine Monohydrate (European)',
+          tags: ['Performance', 'Strength', 'Recovery'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_white_powder_centered_on_a_white_background_--sty_4e883a3e-0fe3-446f-8a1f-0bcaf281823b_0.png',
+          descriptionBold: 'Creatine Monohydrate',
+          descriptionRegular: ' Is The Most Extensively Researched Performance Compound Available. Sourced From European-Certified Facilities For Verified Purity And Traceability, It Replenishes Phosphocreatine Stores In Muscle Tissue — Directly Increasing Strength Output, Power, And The Capacity To Sustain Higher Training Loads Over Time.',
+          checklist: ['European-certified purity', 'Increases power output', 'Replenishes muscle stores', 'Supports lean muscle'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'Elemental Quad-Electrolytes',
+          tags: ['Hydration', 'Performance', 'Recovery'],
+          image: 'https://usefon.com/cdn/shop/files/potassium.webp',
+          descriptionBold: 'Quad-Electrolytes',
+          descriptionRegular: ' — Sodium, Potassium, Calcium, And Magnesium — Work As A Precision Hydration System. This Four-Mineral Complex Maintains Fluid Balance Across Cells, Supports Neuromuscular Signalling, And Prevents The Performance Decline That Begins With Even Marginal Dehydration.',
+          checklist: ['Replaces training losses', 'Maintains fluid balance', 'Prevents performance decline', 'Supports neuromuscular function'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'L-Carnitine',
+          tags: ['Metabolic', 'Recovery', 'Performance'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_off_white_powder_centered_on_a_white_background_--s_d3c457b0-bac9-4335-960e-59c65fbca1af.png',
+          descriptionBold: 'L-Carnitine',
+          descriptionRegular: ' Acts As A Transporter — Shuttling Long-Chain Fatty Acids Into The Mitochondria Where They’re Converted Into Usable Energy. Beyond Fat Metabolism, It Actively Reduces Exercise-Induced Muscle Damage And Supports The Body’s Capacity To Recover Between Sessions Without Compromising Lean Body Composition.',
+          checklist: ['Converts fat to fuel', 'Reduces muscle soreness', 'Supports lean composition', 'Mitochondrial efficiency'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'BCAAs',
+          tags: ['Recovery', 'Muscle', 'Performance'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_white_powder_centered_on_a_white_background_ultra_c_d19797f3-0ff2-496f-a410-1077ddacbfe7.png',
+          descriptionBold: 'Branched-Chain Amino Acids',
+          descriptionRegular: ' — Leucine, Isoleucine, And Valine — Are The Three Essential Amino Acids Most Directly Involved In Muscle Protein Synthesis. Because They’re Essential, The Body Cannot Produce Them; They Must Be Consumed. They Signal Repair, Reduce Muscle Breakdown Under Load, And Compress The Recovery Window Between Training Sessions.',
+          checklist: ['Triggers muscle repair', 'Reduces breakdown under load', 'Essential — not self-produced', 'Compresses recovery window'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'Magnesium',
+          tags: ['Recovery', 'Metabolic', 'Sleep'],
+          image: 'https://usefon.com/cdn/shop/files/MAGNESIUM-CITRATE.webp',
+          descriptionBold: 'Magnesium Citrate',
+          descriptionRegular: ' Participates In Over 300 Enzymatic Reactions — Including Muscle Contraction, Energy Production, Protein Synthesis, And Sleep Regulation. High Training Volumes Deplete Magnesium Faster Than Diet Alone Replaces It. Citrate Form Is Specifically Chosen For Superior Bioavailability Over Cheaper Oxide Alternatives.',
+          checklist: ['Superior citrate absorption', 'Supports muscle contraction', 'Aids sleep regulation', 'Replenishes training losses'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'Probiotics',
+          tags: ['Gut & Brain', 'Absorption', 'Immunity'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_off-white_powder_centered_on_a_white_background_u_18665a0d-ade0-43d4-b5d7-5fda9fed6d07_1.png',
+          descriptionBold: 'Probiotics',
+          descriptionRegular: ' Are The Infrastructure Layer Of The Formula. Gut Integrity Directly Determines How Well Every Other Ingredient Is Absorbed And Utilised — A Compromised Gut Means A Compromised Stack. A Targeted Probiotic Strain Is Included To Maintain Gut Barrier Function, Support Immune Response, And Protect The Delivery Of Everything Else In The Formula.',
+          checklist: ['Protects gut barrier', 'Maximises absorption', 'Supports immune function', 'Optimises full formula'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        }
+      ],
+      onelife: [
+        {
+          title: 'NMN (Nicotinamide Mononucleotide)',
+          tags: ['Longevity', 'Cellular', 'Metabolic'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_white_to_off-white_powder_centered_on_a_white_bac_7fc452ac-85a2-4798-bee2-ac07ae80b4ab_3.png',
+          descriptionBold: 'NMN',
+          descriptionRegular: ' Is A Direct Precursor To NAD+ — The Molecule Responsible For Cellular Energy Production, DNA Repair, And Metabolic Regulation. NAD+ Levels Decline Significantly With Age; NMN Replenishes The Supply, Supporting The Cellular Machinery That Governs How Well The Body Functions Over Time.',
+          checklist: ['Direct NAD+ precursor', 'Supports DNA repair', 'Declines with age — replaced', 'Drives cellular energy'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'Trans-Resveratrol',
+          tags: ['Longevity', 'Cellular', 'Antioxidant'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_pale_yellow_to_light_brown_powder_centered_on_a_w_80de9faa-bc92-4074-88dd-d72f055a1439_1.png',
+          descriptionBold: 'Trans-Resveratrol',
+          descriptionRegular: ' Is The Only Bioactive Form Of Resveratrol Shown To Activate Sirtuins — The Longevity-Associated Proteins That Regulate Cellular Stress Response, Inflammation, And Gene Expression. Works Synergistically With NMN To Amplify NAD+ Pathway Activation.',
+          checklist: ['Activates longevity proteins', 'Synergistic with NMN', 'Bioactive trans form only', 'Cellular stress regulation'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'CoQ10',
+          tags: ['Energy', 'Cellular', 'Antioxidant'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_bright_orange_to_yellow_powder_centered_on_a_whit_3c2314ae-9712-4ee7-885a-6711ba1020b3_3.png',
+          descriptionBold: 'Coenzyme Q10',
+          descriptionRegular: ' Is The Mitochondria’s Primary Electron Carrier — Essential For Converting Nutrients Into ATP, The Body’s Usable Energy Currency. Levels Decline Naturally After 30. As A Fat-Soluble Antioxidant, It Also Neutralises Free Radicals Generated During Energy Production, Protecting The Very Cells It’s Powering.',
+          checklist: ['Powers mitochondrial function', 'Declines naturally after 30', 'Fat-soluble antioxidant', 'Protects cellular output'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'MCT Oil',
+          tags: ['Metabolic', 'Cognitive', 'Energy'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_white_to_off-white_powder_centered_on_a_white_bac_db035e61-e53b-4e8a-81d1-1236d8384a67_2.png',
+          descriptionBold: 'Medium-Chain Triglycerides',
+          descriptionRegular: ' Are Rapidly Absorbed Fats That Bypass Standard Digestive Processing And Convert To Ketones — A Clean, Fast Fuel Source For The Brain. In A Longevity Formula, MCT Oil Serves A Dual Role: Enhancing The Absorption Of Fat-Soluble Compounds Like Resveratrol And CoQ10, While Providing Sustained Cognitive Energy Without A Glucose Spike.',
+          checklist: ['Enhances fat-soluble absorption', 'Converts to ketone fuel', 'Sustained cognitive energy', 'Bypasses standard digestion'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'Antioxidant Complex',
+          tags: ['Cellular', 'Longevity', 'Recovery'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_deep-red-dark-brown_powder_centered_on_a_white_ba_ab3c07d3-9945-4f45-affb-94bb166def65_0.png',
+          descriptionBold: 'Oxidative Stress',
+          descriptionRegular: ' — The Accumulation Of Free Radicals — Is One Of The Primary Drivers Of Cellular Ageing. A Targeted Antioxidant Complex Neutralises Free Radical Activity Across Multiple Pathways, Preserving Mitochondrial Integrity And Reducing The Cellular Wear That Accelerates Biological Ageing Over Time.',
+          checklist: ['Multi-pathway free radical defence', 'Preserves mitochondrial integrity', 'Reduces cellular ageing load', 'Supports full formula efficacy'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        },
+        {
+          title: 'Elemental Electrolytes',
+          tags: ['Hydration', 'Cellular', 'Longevity'],
+          image: 'https://usefon.com/cdn/shop/files/u5644344669_white_to_off-white_powder_centered_on_a_white_bac_f25b1180-3823-4217-b7d2-4f05ade88a42_3.png',
+          descriptionBold: 'OneLife’s Electrolyte Profile',
+          descriptionRegular: ' Is Calibrated For Cellular Hydration At Rest — Supporting The Baseline Fluid Balance Required For NAD+ Pathway Function And Neurological Performance. Hydration At The Cellular Level Is Foundational To Every Longevity Mechanism In The Formula.',
+          checklist: ['Calibrated for cellular hydration', 'Supports NAD+ function', 'Neurological performance', 'Foundation for full formula'],
+          pdfUrl: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC8228369/'
+        }
+      ]
+    };
+
+    var checkIconSvg = '<svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">'
+      + '<path d="M1 4L3.5 6.5L9 1" stroke="#202020" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    var brandNames = { onefit: 'OneFit', onelife: 'OneLife' };
+
+    var brandSelectSection = document.getElementById('brand-select-section');
+    var brandMenuSection = document.getElementById('brand-menu-section');
+    var brandMenuList = document.getElementById('brand-menu-list');
+    var brandMenuHeading = document.getElementById('brand-menu-heading');
+    var sheetOverlay = document.getElementById('sheet-overlay');
+    var sheetCard = document.getElementById('sheet-card');
+    var pdfModal = document.getElementById('pdf-modal');
+    var activeItem = null;
+
+    function showBrandSelect() {
+      closeSheet();
+      brandMenuSection.style.display = 'none';
+      brandSelectSection.style.display = 'flex';
+    }
+
+    function showBrandMenu(brand) {
+      brandMenuHeading.textContent = brandNames[brand] + '’s Ingredients';
+      renderBrandList(brand);
+      brandSelectSection.style.display = 'none';
+      brandMenuSection.style.display = 'flex';
+    }
+
+    function renderBrandList(brand) {
+      brandMenuList.innerHTML = '';
+      brandIngredients[brand].forEach(function (item, index) {
+        var row = document.createElement('div');
+        row.className = 'ingredients__row ingredients__row--enter';
+        row.style.cursor = 'pointer';
+        row.style.animationDelay = (index * 80) + 'ms';
+        row.innerHTML = '<div class="ingredients__thumb" style="background-image:url(\'' + item.image + '\')"></div>'
+          + '<div class="ingredients__label">' + item.title + '</div>'
+          + '<div class="ingredients__arrow"></div>';
+        row.addEventListener('click', function () {
+          openSheet(brand, index);
+        });
+        brandMenuList.appendChild(row);
+      });
+    }
+
+    function replayAnimation(el, className) {
+      el.classList.remove(className);
+      void el.offsetWidth;
+      el.classList.add(className);
+    }
+
+    function openSheet(brand, index) {
+      var item = brandIngredients[brand][index];
+      activeItem = item;
+
+      document.getElementById('sheet-title').textContent = item.title;
+
+      var tagsEl = document.getElementById('sheet-tags');
+      tagsEl.innerHTML = item.tags.map(function (tag, tagIndex) {
+        return '<span style="animation-delay:' + (tagIndex * 70) + 'ms">' + tag + '</span>';
+      }).join('<span class="detail__tag-divider"></span>');
+
+      var imageEl = document.getElementById('sheet-image');
+      imageEl.className = 'detail__image';
+      imageEl.style.backgroundImage = "url('" + item.image + "')";
+
+      var descriptionEl = document.getElementById('sheet-description');
+      descriptionEl.innerHTML = '<span class="detail__description-bold">' + item.descriptionBold + '</span>'
+        + '<span class="detail__description-regular">' + item.descriptionRegular + '</span>';
+
+      replayAnimation(document.querySelector('#sheet-card .detail__content'), 'detail__content--enter');
+
+      var checklistEl = document.getElementById('sheet-checklist');
+      checklistEl.innerHTML = item.checklist.map(function (text, checkIndex) {
+        return '<div class="detail__check-item" style="animation-delay:' + (checkIndex * 70) + 'ms">'
+          + '<span class="detail__check-icon">' + checkIconSvg + '</span>'
+          + '<span class="detail__check-text">' + text + '</span>'
+          + '</div>';
+      }).join('');
+
+      window.PdfViewer.showPreview(item.pdfUrl);
+
+      sheetCard.scrollTop = 0;
+      sheetOverlay.classList.add('sheet-overlay--open');
+    }
+
+    function closeSheet() {
+      sheetOverlay.classList.remove('sheet-overlay--open');
+      window.PdfViewer.clearPreview();
+      activeItem = null;
+    }
+
+    function openPdfModal() {
+      if (!activeItem) return;
+      window.PdfViewer.showModal(activeItem.pdfUrl);
+      pdfModal.classList.add('pdf-modal--open');
+    }
+
+    function closePdfModal() {
+      pdfModal.classList.remove('pdf-modal--open');
+      window.PdfViewer.clearModal();
+    }
+
+    document.getElementById('brand-select-onefit').addEventListener('click', function () {
+      showBrandMenu('onefit');
+    });
+
+    document.getElementById('brand-select-onelife').addEventListener('click', function () {
+      showBrandMenu('onelife');
+    });
+
+    document.getElementById('brand-menu-view-all').addEventListener('click', showBrandSelect);
+
+    document.getElementById('sheet-close').addEventListener('click', closeSheet);
+
+    sheetOverlay.addEventListener('click', function (event) {
+      if (event.target === sheetOverlay) {
+        closeSheet();
+      }
+    });
+
+    document.getElementById('sheet-gallery-expand').addEventListener('click', openPdfModal);
+    document.getElementById('pdf-modal-close').addEventListener('click', closePdfModal);
+
+    pdfModal.addEventListener('click', function (event) {
+      if (event.target === pdfModal) {
+        closePdfModal();
+      }
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key !== 'Escape') return;
+      if (pdfModal.classList.contains('pdf-modal--open')) {
+        closePdfModal();
+      } else if (sheetOverlay.classList.contains('sheet-overlay--open')) {
+        closeSheet();
+      }
+    });
+  </script>
+
+  <script type="module">
+    import * as pdfjsLib from 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.min.mjs';
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.4.149/pdf.worker.min.mjs';
+
+    var previewEl = document.getElementById('sheet-pdf-viewer');
+    var modalEl = document.getElementById('modal-pdf-viewer');
+    var previewToken = 0;
+    var modalToken = 0;
+
+    function setStatus(container, text) {
+      container.innerHTML = '<div class="pdf-viewer__status">' + text + '</div>';
+    }
+
+    function renderPageToCanvas(page, container) {
+      var viewport = page.getViewport({ scale: 1 });
+      var scale = (container.clientWidth || 320) / viewport.width;
+      var scaledViewport = page.getViewport({ scale: scale });
+
+      var canvas = document.createElement('canvas');
+      canvas.width = scaledViewport.width;
+      canvas.height = scaledViewport.height;
+      container.appendChild(canvas);
+
+      return page.render({ canvasContext: canvas.getContext('2d'), viewport: scaledViewport }).promise;
+    }
+
+    async function showPreview(url) {
+      var token = ++previewToken;
+      setStatus(previewEl, 'Loading preview…');
+
+      try {
+        var pdf = await pdfjsLib.getDocument(url).promise;
+        if (token !== previewToken) return;
+        var page = await pdf.getPage(1);
+        if (token !== previewToken) return;
+        previewEl.innerHTML = '';
+        await renderPageToCanvas(page, previewEl);
+      } catch (err) {
+        if (token !== previewToken) return;
+        setStatus(previewEl, 'Preview unavailable for this document.');
+      }
+    }
+
+    function clearPreview() {
+      previewToken++;
+      previewEl.innerHTML = '';
+    }
+
+    async function showModal(url) {
+      var token = ++modalToken;
+      setStatus(modalEl, 'Loading document…');
+
+      try {
+        var pdf = await pdfjsLib.getDocument(url).promise;
+        if (token !== modalToken) return;
+        modalEl.innerHTML = '';
+
+        for (var pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          var page = await pdf.getPage(pageNum);
+          if (token !== modalToken) return;
+          await renderPageToCanvas(page, modalEl);
+        }
+      } catch (err) {
+        if (token !== modalToken) return;
+        setStatus(modalEl, 'This document can\'t be displayed. It may be blocked by the source site.');
+      }
+    }
+
+    function clearModal() {
+      modalToken++;
+      modalEl.innerHTML = '';
+    }
+
+    window.PdfViewer = {
+      showPreview: showPreview,
+      clearPreview: clearPreview,
+      showModal: showModal,
+      clearModal: clearModal
+    };
+  </script>
+</body>
+</html>
