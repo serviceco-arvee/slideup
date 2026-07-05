@@ -812,7 +812,6 @@
         text-transform: capitalize;
       }
 
-      /* Same glass-button treatment the old expand icon used, now sized for text */
       .detail__gallery-cta {
         box-sizing: border-box;
         position: absolute;
@@ -920,9 +919,6 @@
 
   <section class="ingredients" id="brand-menu-section" style="display: none;">
     <style>
-      /* This screen owns its own viewport height: heading stays put, only the
-         list scrolls in its own contained box, and the button is a normal
-         (non-floating) element below it — never covered by scrolled content. */
       #brand-menu-section {
         height: 100vh;
         height: 100dvh;
@@ -1349,10 +1345,6 @@
   </script>
 
   <script>
-    // Slows and smooths mouse-wheel/trackpad scrolling on desktop by easing
-    // toward the target position instead of jumping straight there. Touch
-    // devices keep native OS momentum scrolling untouched (that's already
-    // smooth and shouldn't be fought).
     function applyEasedWheelScroll(el, speedFactor, easeFactor) {
       var target = null;
       var raf = null;
