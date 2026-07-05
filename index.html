@@ -882,8 +882,10 @@
   <section class="ingredients" id="brand-menu-section" style="display: none;">
     <style>
       #brand-menu-section {
-        height: 100vh;
-        height: 100dvh;
+        position: fixed;
+        inset: 0;
+        height: auto;
+        min-height: 0;
         padding: 40px 20px 0;
         padding-top: calc(env(safe-area-inset-top, 0px) + 40px);
         padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 90px);
