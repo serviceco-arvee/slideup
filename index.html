@@ -235,6 +235,7 @@
         display: flex;
         align-items: center;
         width: 367px;
+        max-width: 100%;
         min-height: 83px;
         opacity: 1;
         background: #ffffff;
@@ -332,6 +333,7 @@
       .ingredients__button {
         box-sizing: border-box;
         width: 367px;
+        max-width: 100%;
         height: 43px;
         margin-top: 46px;
         display: flex;
@@ -801,11 +803,20 @@
         position: absolute;
         inset: 0;
         overflow-y: auto;
+        overflow-x: hidden;
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 8px;
         box-sizing: border-box;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .pdf-viewer::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
       }
 
       .pdf-viewer canvas {
@@ -929,11 +940,21 @@
         min-height: 0;
         width: 100%;
         overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
         display: flex;
         flex-direction: column;
         align-items: center;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .ingredients__scroll::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
       }
 
       .ingredients__scroll .ingredients__list {
@@ -1009,6 +1030,8 @@
         height: 100vh;
         height: 100dvh;
         overflow-y: auto;
+        overflow-x: hidden;
+        overscroll-behavior: contain;
         -webkit-overflow-scrolling: touch;
         scroll-behavior: smooth;
         background: #F7F7F7;
@@ -1018,6 +1041,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
         box-shadow: 0px -8px 40px rgba(0, 0, 0, 0.3);
         transform: translateY(100%);
         will-change: transform;
@@ -1028,6 +1053,11 @@
         transform: translateY(0);
       }
 
+      .sheet-card::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+      }
     </style>
 
     <div class="sheet-card" id="sheet-card">
@@ -1502,6 +1532,40 @@
       showModal: showModal,
       clearModal: clearModal
     };
+  </script>
+
+  <script>
+    // Slows and smooths mouse-wheel/trackpad scrolling on desktop by easing
+    // toward the target position instead of jumping straight there. Touch
+    // devices keep native OS momentum scrolling untouched (that's already
+    // smooth and shouldn't be fought).
+    function applyEasedWheelScroll(el, speedFactor, easeFactor) {
+      var target = null;
+      var raf = null;
+
+      el.addEventListener('wheel', function (event) {
+        event.preventDefault();
+        if (target === null) target = el.scrollTop;
+        target += event.deltaY * speedFactor;
+        target = Math.max(0, Math.min(target, el.scrollHeight - el.clientHeight));
+        if (!raf) raf = requestAnimationFrame(step);
+      }, { passive: false });
+
+      function step() {
+        var diff = target - el.scrollTop;
+        if (Math.abs(diff) < 0.5) {
+          el.scrollTop = target;
+          raf = null;
+          target = null;
+          return;
+        }
+        el.scrollTop += diff * easeFactor;
+        raf = requestAnimationFrame(step);
+      }
+    }
+
+    applyEasedWheelScroll(document.getElementById('brand-menu-list').parentElement, 0.6, 0.12);
+    applyEasedWheelScroll(document.getElementById('sheet-card'), 0.6, 0.12);
   </script>
 </body>
 </html>
